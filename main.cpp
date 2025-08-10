@@ -1,79 +1,65 @@
 #include <iostream>
 #include <vector>
 #include "raylib.h"
-
-struct Node
-{
-    int value;
-    Node* left;
-    Node* right;
-};
-
-void collectChildren(std::vector<Node*>& nodes, bool rightFirst)
-{
-    std::vector<Node*> collected;
-    for (const auto& node : nodes)
-    {
-        if (node == nullptr) continue;
-        if (rightFirst)
-        {
-            collected.push_back(node->right);
-            collected.push_back(node->left);
-        }
-        else
-        {
-            collected.push_back(node->left);
-            collected.push_back(node->right);
-        }
-    }
-    nodes = collected;
-}
-
-bool isTreeSymmetric(const Node& root)
-{
-    std::vector<Node*> leftNodes;
-    std::vector<Node*> rightNodes;
-    leftNodes.push_back(root.left);
-    rightNodes.push_back(root.right);
-
-    while (!leftNodes.empty() && !rightNodes.empty())
-    {
-        if (rightNodes.size() != leftNodes.size())
-        {
-            return false;
-        }
-        for (int i = 0; i < leftNodes.size(); i++)
-        {
-            Node* l = leftNodes[i];
-            Node* r = rightNodes[i];
-            if ((l == nullptr && r != nullptr) || (l != nullptr && r == nullptr) || (l != nullptr && r != nullptr && l->value != r->value))
-            {
-                return false;
-            }
-        }
-        collectChildren(leftNodes, false);
-        collectChildren(rightNodes, true);
-    }
-    return true;
-}
-
-bool sample0();
-bool sample1();
+#include "raymath.h"
+#include "trees.h"
 
 #define WINDOW_WIDTH 1280
 #define WINDOW_HEIGHT 1280
+#define FONT_SIZE 25
+
+static float angleFalloff = 0.95f;
+
+void drawTree(const Node* root, Vector2 from, Vector2 axisDir, float sideAngle)
+{
+    static char buf[255];
+    snprintf(buf, 255, "%d", root->value);
+    Vector2 dirLeft = Vector2Rotate(axisDir, sideAngle);
+    Vector2 dirRight = Vector2Rotate(axisDir, -sideAngle);
+    Vector2 toLeft = from + dirLeft;
+    Vector2 toRight = from + dirRight;
+    if (root->left != nullptr)
+    {
+        DrawLine(from.x, from.y, toLeft.x, toLeft.y, GREEN);
+    }
+    if (root->right != nullptr)
+    {
+        DrawLine(from.x, from.y, toRight.x, toRight.y, RED);
+    }
+
+    DrawCircle(from.x, from.y, 15, Color(255, 255, 255, 200));
+    int textWidth = MeasureText(buf, FONT_SIZE);
+    DrawText(buf, from.x - textWidth / 2, from.y - FONT_SIZE / 2, FONT_SIZE, BLACK);
+
+    if (root->left != nullptr)
+    {
+        drawTree(root->left, toLeft, dirLeft, sideAngle * angleFalloff);
+    }
+    if (root->right != nullptr)
+    {
+        drawTree(root->right, toRight, dirRight, sideAngle * angleFalloff);
+    }
+}
 
 int main()
 {
-    std::cout << "Sample0: " << sample0() << std::endl;
-    std::cout << "Sample1: " << sample1() << std::endl;
     InitWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "Draw!!!");
 
     while (!WindowShouldClose())
     {
+        float frameTime = GetFrameTime();
+        if (IsKeyDown(KEY_MINUS))
+        {
+            angleFalloff -= frameTime;
+        }
+        if (IsKeyDown(KEY_EQUAL))
+        {
+            angleFalloff += frameTime;
+        }
         BeginDrawing();
         ClearBackground(BLACK);
-        DrawLine()
+        drawTree(&tree01, Vector2{WINDOW_WIDTH / 2, 200}, Vector2{0, 100}, 30 * DEG2RAD * angleFalloff);
+        drawTree(&tree02, Vector2{WINDOW_WIDTH / 2, 500}, Vector2{0, 100}, 30 * DEG2RAD * angleFalloff);
         // DrawText("Congrats! You created your first window!", 190, 200, 20, LIGHTGRAY);
         EndDrawing();
     }
@@ -81,64 +67,4 @@ int main()
     CloseWindow();
 
     return 0;
-}
-
-bool sample0()
-{
-    const auto root = Node{
-        .value = 0,
-        .left = new Node{
-            .value = 1,
-            .left = new Node{
-                .value = 2,
-            }
-        },
-        .right = new Node{
-            .value = 1,
-            .right = new Node{
-                .value = 2,
-            }
-        },
-    };
-
-    return isTreeSymmetric(root);
-}
-
-bool sample1()
-{
-    const auto root = Node{
-        .value = 0,
-        .left = new Node{
-            .value = 1,
-            .left = new Node{
-                .value = 2,
-                .left = new Node{
-                    .value = 3,
-                    .left = new Node{
-                        .value = 4,
-                    },
-                }
-            },
-            .right = new Node{
-                .value = 2,
-            }
-        },
-        .right = new Node{
-            .value = 1,
-            .left = new Node{
-                .value = 2,
-            },
-            .right = new Node{
-                .value = 2,
-                .right = new Node{
-                    .value = 3,
-                    .right = new Node{
-                        .value = 4,
-                    },
-                }
-            }
-        },
-    };
-
-    return isTreeSymmetric(root);
 }

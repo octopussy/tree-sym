@@ -7,7 +7,10 @@ include_directories(
         thirdparty/raylib/include
 )
 
-add_executable(TreeSym main.cpp)
+add_executable(TreeSym main.cpp
+        trees.h
+        tree_sym.h
+        tree_sym.cpp)
 target_link_libraries(
         TreeSym
         ${CMAKE_SOURCE_DIR}/thirdparty/raylib/lib/libraylib.a
