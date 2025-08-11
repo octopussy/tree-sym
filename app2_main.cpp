@@ -23,8 +23,8 @@ int main()
     float ty = 0;
     std::filesystem::path path = std::filesystem::current_path();
     // SetConfigFlags(FLAG_WINDOW_RESIZABLE); // Make the window resizable
-    InitWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "Draw!!!");
-    Texture pig = LoadTexture("../data/pig.jpg");
+    InitWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "Balls!!!");
+    Texture pig = LoadTexture("data/pig.jpg");
 
     while (!WindowShouldClose())
     {

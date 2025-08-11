@@ -2,11 +2,11 @@
 // Created by user on 8/11/2025.
 //
 #include <vector>
-#include "trees.h"
+#include "t2.h"
 
-void collectChildren(std::vector<Node*>& nodes, bool rightFirst)
+void collectChildren(std::vector<T2Node*>& nodes, bool rightFirst)
 {
-    std::vector<Node*> collected;
+    std::vector<T2Node*> collected;
     for (const auto& node : nodes)
     {
         if (node == nullptr) continue;
@@ -24,10 +24,10 @@ void collectChildren(std::vector<Node*>& nodes, bool rightFirst)
     nodes = collected;
 }
 
-bool isTreeSymmetric(const Node& root)
+bool isTreeSymmetric(const T2Node& root)
 {
-    std::vector<Node*> leftNodes;
-    std::vector<Node*> rightNodes;
+    std::vector<T2Node*> leftNodes;
+    std::vector<T2Node*> rightNodes;
     leftNodes.push_back(root.left);
     rightNodes.push_back(root.right);
 
@@ -39,8 +39,8 @@ bool isTreeSymmetric(const Node& root)
         }
         for (int i = 0; i < leftNodes.size(); i++)
         {
-            Node* l = leftNodes[i];
-            Node* r = rightNodes[i];
+            T2Node* l = leftNodes[i];
+            T2Node* r = rightNodes[i];
             if ((l == nullptr && r != nullptr) || (l != nullptr && r == nullptr) || (l != nullptr && r != nullptr && l->value != r->value))
             {
                 return false;

@@ -2,18 +2,18 @@
 #include <vector>
 #include "raylib.h"
 #include "raymath.h"
-#include "trees.h"
+#include "t2.h"
 
 #define WINDOW_WIDTH 1280
 #define WINDOW_HEIGHT 1280
-#define FONT_SIZE 25
+#define FONT_SIZE 20
 
 static float angleFalloff = 0.95f;
 
-void drawTree(const Node* root, Vector2 from, Vector2 axisDir, float sideAngle)
+void drawTree(const T2Node* root, Vector2 from, Vector2 axisDir, float sideAngle)
 {
     static char buf[255];
-    snprintf(buf, 255, "%d", root->value);
+    snprintf(buf, 255, "%s", root->value.c_str());
     Vector2 dirLeft = Vector2Rotate(axisDir, sideAngle);
     Vector2 dirRight = Vector2Rotate(axisDir, -sideAngle);
     Vector2 toLeft = from + dirLeft;
@@ -27,7 +27,7 @@ void drawTree(const Node* root, Vector2 from, Vector2 axisDir, float sideAngle)
         DrawLine(from.x, from.y, toRight.x, toRight.y, RED);
     }
 
-    DrawCircle(from.x, from.y, 15, Color(255, 255, 255, 200));
+    DrawCircle(from.x, from.y, 30, Color(255, 255, 255, 200));
     int textWidth = MeasureText(buf, FONT_SIZE);
     DrawText(buf, from.x - textWidth / 2, from.y - FONT_SIZE / 2, FONT_SIZE, BLACK);
 

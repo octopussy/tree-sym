@@ -2,6 +2,17 @@ cmake_minimum_required(VERSION 3.31)
 project(TreeSym)
 
 set(CMAKE_CXX_STANDARD 23)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+include(GoogleTest)
+include(FetchContent)
+FetchContent_Declare(
+        googletest
+        URL https://github.com/google/googletest/archive/244cec869d12e53378fa0efb610cd4c32a454ec8.zip
+)
+# For Windows: Prevent overriding the parent project's compiler/linker settings
+set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+FetchContent_MakeAvailable(googletest)
 
 if (UNIX AND APPLE)
     message("OS: MacOS")
@@ -42,4 +53,16 @@ add_app(TreeSym
 
 add_app(App2
         app2_main.cpp
+
 )
+
+enable_testing()
+add_executable(
+        t2_tests
+        t2_parser_test.cpp
+)
+target_link_libraries(
+        t2_tests
+        GTest::gtest_main
+)
+gtest_discover_tests(t2_tests)

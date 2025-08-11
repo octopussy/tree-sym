@@ -1,0 +1,27 @@
+﻿{
+  "value": "root",
+  "left": {
+    "value": "l1",
+    "left": {
+      "value": "l12"
+    },
+    "right": {
+      "value": "r12",
+      "left": {
+        "value": "l12"
+      },
+      "right": {
+        "value": "l12"
+      }
+    }
+  },
+  "right": {
+    "value": "r1",
+    "left": {
+
+    },
+    "right": {
+
+    }
+  }
+}
