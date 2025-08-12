@@ -41,24 +41,22 @@ include_directories(
         thirdparty/raylib/include
 )
 
-function(add_app name sources)
-    add_executable(${name} ${sources})
-    target_link_libraries(${name} ${APP_LIBS})
-endfunction()
-
-add_app(TreeSym
+add_executable(TreeSym
         main.cpp
+        t2_parser.cpp
         tree_sym.cpp
 )
+target_link_libraries(TreeSym ${APP_LIBS})
 
-add_app(App2
+add_executable(App2
         app2_main.cpp
-
 )
+target_link_libraries(App2 ${APP_LIBS})
 
 enable_testing()
 add_executable(
         t2_tests
+        t2_parser.cpp
         t2_parser_test.cpp
 )
 target_link_libraries(
